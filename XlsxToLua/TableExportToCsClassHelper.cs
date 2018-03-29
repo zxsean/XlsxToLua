@@ -85,6 +85,10 @@ public class TableExportToCsClassHelper
             stringBuilder.Append(_GetCsClassFieldDefine(fieldInfo));
             // 变量名首字母大写
             string fieldName = char.ToUpper(fieldInfo.FieldName[0]) + fieldInfo.FieldName.Substring(1);
+
+            // 不需要大写
+            fieldName = fieldInfo.FieldName;
+
             stringBuilder.AppendLine(string.Concat(" ", fieldName, " ", _CS_CLASS_GET_SET_STRING));
         }
         --level;
