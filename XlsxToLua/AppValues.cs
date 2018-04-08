@@ -168,6 +168,16 @@ public class AppValues
     public const string EXPORT_CS_CLASS_ENABLE_EXPORT_COLUMNINFO_STRING = "exportColumninfo";
 
     /// <summary>
+    /// 字段首字母大写
+    /// </summary>
+    public const string EXPORT_CS_CLASS_UPPERFIELDNAME_STRING = "upperFieldName";
+    
+    /// <summary>
+    /// 是否导出成属性格式
+    /// </summary>
+    public const string EXPORT_CS_CLASS_PROPERTYSTYLE_STRING = "exportPropertyStyle";
+
+    /// <summary>
     /// 导出csv对应Java类文件参数下属的具体参数，用于配置导出路径
     /// </summary>
     public const string EXPORT_JAVA_CLASS_PARAM_EXPORT_PATH_PARAM_STRING = "exportPath";
@@ -590,7 +600,7 @@ public class AppValues
     /// <summary>
     /// 导出属性格式
     /// </summary>
-    public static bool ExportClassProperty = true;
+    public static bool ExportClassPropertyStyle = true;
 
     #endregion
 }

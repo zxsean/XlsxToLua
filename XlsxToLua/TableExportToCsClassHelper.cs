@@ -106,7 +106,7 @@ public class TableExportToCsClassHelper
                 fieldName = fieldInfo.FieldName;
             }
 
-            if (AppValues.ExportClassProperty)
+            if (AppValues.ExportClassPropertyStyle)
             {
                 // 属性格式
                 stringBuilder.AppendLine(string.Concat(" ", fieldName, " ", _CS_CLASS_GET_SET_STRING));

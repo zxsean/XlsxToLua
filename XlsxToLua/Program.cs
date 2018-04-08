@@ -530,6 +530,14 @@ public class Program
                                 {
                                     AppValues.ExportClassColumnInfo = Convert.ToBoolean(value.Trim());
                                 }
+                                else if (AppValues.EXPORT_CS_CLASS_UPPERFIELDNAME_STRING.Equals(key, StringComparison.CurrentCultureIgnoreCase))
+                                {
+                                    AppValues.ExportClassUpperFieldName = Convert.ToBoolean(value.Trim());
+                                }
+                                else if (AppValues.EXPORT_CS_CLASS_PROPERTYSTYLE_STRING.Equals(key, StringComparison.CurrentCultureIgnoreCase))
+                                {
+                                    AppValues.ExportClassPropertyStyle = Convert.ToBoolean(value.Trim());
+                                }
                                 else
                                     Utils.LogErrorAndExit(string.Format("错误：声明的{0}参数下属的参数{1}非法", AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING, key));
                             }
