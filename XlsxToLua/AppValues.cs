@@ -163,6 +163,11 @@ public class AppValues
     public const string EXPORT_CS_CLASS_PARAM_USING_PARAM_STRING = "using";
 
     /// <summary>
+    /// 是否导出注释
+    /// </summary>
+    public const string EXPORT_CS_CLASS_ENABLE_EXPORT_COLUMNINFO_STRING = "exportColumninfo";
+
+    /// <summary>
     /// 导出csv对应Java类文件参数下属的具体参数，用于配置导出路径
     /// </summary>
     public const string EXPORT_JAVA_CLASS_PARAM_EXPORT_PATH_PARAM_STRING = "exportPath";
@@ -569,4 +574,23 @@ public class AppValues
     /// 存储运行时打印的所有信息，在程序运行完毕后输出为txt文件，从而解决如果输出内容过多控制台无法显示全部信息的问题
     /// </summary>
     public static StringBuilder LogContent = new StringBuilder();
+
+    #region 新增Class相关配置
+
+    /// <summary>
+    /// 是否在导出的Class文件中添加列信息
+    /// </summary>
+    public static bool ExportClassColumnInfo = false;
+
+    /// <summary>
+    /// 首字母大写
+    /// </summary>
+    public static bool ExportClassUpperFieldName = true;
+
+    /// <summary>
+    /// 导出属性格式
+    /// </summary>
+    public static bool ExportClassProperty = true;
+
+    #endregion
 }

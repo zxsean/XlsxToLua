@@ -526,6 +526,10 @@ public class Program
                                         }
                                     }
                                 }
+                                else if (AppValues.EXPORT_CS_CLASS_ENABLE_EXPORT_COLUMNINFO_STRING.Equals(key, StringComparison.CurrentCultureIgnoreCase))
+                                {
+                                    AppValues.ExportClassColumnInfo = Convert.ToBoolean(value.Trim());
+                                }
                                 else
                                     Utils.LogErrorAndExit(string.Format("错误：声明的{0}参数下属的参数{1}非法", AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING, key));
                             }

@@ -80,16 +80,42 @@ public class TableExportToCsClassHelper
         // 逐个生成类字段信息
         foreach (FieldInfo fieldInfo in allFieldInfo)
         {
+            // 是否导出注释
+            if (AppValues.ExportClassColumnInfo &&
+               !string.IsNullOrEmpty(fieldInfo.Desc))
+            {
+                stringBuilder.Append(_GetCsClassIndentation(level));
+                stringBuilder.Append("//");
+                stringBuilder.AppendLine(fieldInfo.Desc);
+            }
+
             stringBuilder.Append(_GetCsClassIndentation(level));
             stringBuilder.Append("public ");
             stringBuilder.Append(_GetCsClassFieldDefine(fieldInfo));
+
             // 变量名首字母大写
-            string fieldName = char.ToUpper(fieldInfo.FieldName[0]) + fieldInfo.FieldName.Substring(1);
+            string fieldName;
 
-            // 不需要大写
-            fieldName = fieldInfo.FieldName;
+            if (AppValues.ExportClassUpperFieldName)
+            {
+                fieldName = char.ToUpper(fieldInfo.FieldName[0]) + fieldInfo.FieldName.Substring(1);
+            }
+            else
+            {
+                // 不需要大写
+                fieldName = fieldInfo.FieldName;
+            }
 
-            stringBuilder.AppendLine(string.Concat(" ", fieldName, " ", _CS_CLASS_GET_SET_STRING));
+            if (AppValues.ExportClassProperty)
+            {
+                // 属性格式
+                stringBuilder.AppendLine(string.Concat(" ", fieldName, " ", _CS_CLASS_GET_SET_STRING));
+            }
+            else
+            {
+                // 非属性格式
+                stringBuilder.AppendLine(string.Concat(" ", fieldName, ";"));
+            }
         }
         --level;
         // 闭合类定义
