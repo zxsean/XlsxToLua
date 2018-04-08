@@ -37,6 +37,9 @@ public class AppValues
     public const string EXPORT_CS_CLASS_PARAM_SUBTYPE_EXPORT_PATH = "exportPath";
     public const string EXPORT_CS_CLASS_PARAM_SUBTYPE_NAMESPACE = "namespace";
     public const string EXPORT_CS_CLASS_PARAM_SUBTYPE_USING = "using";
+    public const string EXPORT_CS_CLASS_ENABLE_EXPORT_COLUMNINFO_STRING = "exportColumninfo";
+    public const string EXPORT_CS_CLASS_UPPERFIELDNAME_STRING = "upperFieldName";
+    public const string EXPORT_CS_CLASS_PROPERTYSTYLE_STRING = "exportPropertyStyle";
 
     public const string EXPORT_JAVA_CLASS_PARAM_SUBTYPE_EXPORT_PATH = "exportPath";
     public const string EXPORT_JAVA_CLASS_PARAM_SUBTYPE_PACKAGE = "package";

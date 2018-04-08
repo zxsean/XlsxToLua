@@ -441,6 +441,13 @@ namespace XlsxToLuaGUI
                     if (cbIsUseRelativePath.Checked == true)
                         configStringBuilder.Append(AppValues.SAVE_CONFIG_KEY_IS_CHECKED_USE_RELATIVE_PATH).Append(AppValues.SAVE_CONFIG_KEY_VALUE_SEPARATOR).AppendLine(TRUE_STRING);
 
+                    if (cbExportClassColumnInfo.Checked == true)
+                        configStringBuilder.Append(AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING).Append(AppValues.SAVE_CONFIG_PARAM_SUBTYPE_SEPARATOR).Append(AppValues.EXPORT_CS_CLASS_ENABLE_EXPORT_COLUMNINFO_STRING).Append(AppValues.SAVE_CONFIG_KEY_VALUE_SEPARATOR).AppendLine(TRUE_STRING);
+                    if (cbExportClassUpperField.Checked == true)
+                        configStringBuilder.Append(AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING).Append(AppValues.SAVE_CONFIG_PARAM_SUBTYPE_SEPARATOR).Append(AppValues.EXPORT_CS_CLASS_UPPERFIELDNAME_STRING).Append(AppValues.SAVE_CONFIG_KEY_VALUE_SEPARATOR).AppendLine(TRUE_STRING);
+                    if (cbExportClassPropertyStyle.Checked == true)
+                        configStringBuilder.Append(AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING).Append(AppValues.SAVE_CONFIG_PARAM_SUBTYPE_SEPARATOR).Append(AppValues.EXPORT_CS_CLASS_PROPERTYSTYLE_STRING).Append(AppValues.SAVE_CONFIG_KEY_VALUE_SEPARATOR).AppendLine(TRUE_STRING);
+
                     string errorString = null;
                     Utils.SaveFile(dialog.FileName, configStringBuilder.ToString(), out errorString);
                     if (string.IsNullOrEmpty(errorString))
@@ -527,6 +534,25 @@ namespace XlsxToLuaGUI
                 string exportCsClassUsing = string.Concat(AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING, AppValues.SAVE_CONFIG_PARAM_SUBTYPE_SEPARATOR, AppValues.EXPORT_CS_CLASS_PARAM_SUBTYPE_USING);
                 if (config.ContainsKey(exportCsClassUsing))
                     tbExportCsClassUsing.Text = config[exportCsClassUsing];
+
+                // C#类注释
+                string exportCsClassColumnInfo = string.Concat(AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING, AppValues.SAVE_CONFIG_PARAM_SUBTYPE_SEPARATOR, AppValues.EXPORT_CS_CLASS_ENABLE_EXPORT_COLUMNINFO_STRING);
+                if (config.ContainsKey(exportCsClassColumnInfo))
+                    cbExportClassColumnInfo.Checked = true;
+                else
+                    cbExportClassColumnInfo.Checked = false;
+                
+                string exportCsClassUpperField = string.Concat(AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING, AppValues.SAVE_CONFIG_PARAM_SUBTYPE_SEPARATOR, AppValues.EXPORT_CS_CLASS_UPPERFIELDNAME_STRING);
+                if (config.ContainsKey(exportCsClassUpperField))
+                    cbExportClassUpperField.Checked = true;
+                else
+                    cbExportClassUpperField.Checked = false;
+                
+                string exportCsClassPropertyStyle = string.Concat(AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING, AppValues.SAVE_CONFIG_PARAM_SUBTYPE_SEPARATOR, AppValues.EXPORT_CS_CLASS_PROPERTYSTYLE_STRING);
+                if (config.ContainsKey(exportCsClassPropertyStyle))
+                    cbExportClassPropertyStyle.Checked = true;
+                else
+                    cbExportClassPropertyStyle.Checked = false;
 
                 string exportJavaClassFilePathKey = string.Concat(AppValues.EXPORT_JAVA_CLASS_PARAM_PARAM_STRING, AppValues.SAVE_CONFIG_PARAM_SUBTYPE_SEPARATOR, AppValues.EXPORT_JAVA_CLASS_PARAM_SUBTYPE_EXPORT_PATH);
                 if (config.ContainsKey(exportJavaClassFilePathKey))
@@ -1088,6 +1114,18 @@ namespace XlsxToLuaGUI
                 // C#类文件引用类库
                 string csvClassUsing = tbExportCsClassUsing.Text.Trim();
                 exportCsClassParamList.Add(string.Format(KEY_AND_VALUE_FORMAT, AppValues.EXPORT_CS_CLASS_PARAM_SUBTYPE_USING, csvClassUsing));
+
+                // C#类文件注释
+                bool csvClassExportColumnInfo = cbExportClassColumnInfo.Checked;
+                exportCsClassParamList.Add(string.Format(KEY_AND_VALUE_FORMAT, AppValues.EXPORT_CS_CLASS_ENABLE_EXPORT_COLUMNINFO_STRING, csvClassExportColumnInfo == true ? "true" : "false"));
+
+                // C#类字段首字母大写
+                bool csvClassExportUpperFieldName = cbExportClassUpperField.Checked;
+                exportCsClassParamList.Add(string.Format(KEY_AND_VALUE_FORMAT, AppValues.EXPORT_CS_CLASS_UPPERFIELDNAME_STRING, csvClassExportUpperFieldName == true ? "true" : "false"));
+
+                // C#类导出成属性格式
+                bool csvClassExportPropertyStyle = cbExportClassPropertyStyle.Checked;
+                exportCsClassParamList.Add(string.Format(KEY_AND_VALUE_FORMAT, AppValues.EXPORT_CS_CLASS_PROPERTYSTYLE_STRING, csvClassExportPropertyStyle == true ? "true" : "false"));
 
                 stringBuilder.AppendFormat("\"{0}({1})\" ", AppValues.EXPORT_CS_CLASS_PARAM_PARAM_STRING, Utils.CombineString(exportCsClassParamList, "|"));
             }
