@@ -100,30 +100,9 @@ public class TableExportToLuaHelper
         if (AppValues.IsNeedColumnInfo == true)
             exportString = _GetColumnInfo(tableInfo) + exportString;
 
-        // 读取配置
-        AppValues.ExportOption exportConfig = AppValues.ExportOption.ExportAllTables;
-
-        if (tableInfo.TableConfig != null &&
-            tableInfo.TableConfig.ContainsKey(AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE) &&
-            tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE].Count > 0)
-        {
-            try
-            {
-                exportConfig = (AppValues.ExportOption)Enum.Parse(typeof(AppValues.ExportOption), tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE][0]);
-                Utils.Log(string.Format("config中发现了{0}配置,参数为:{1}", AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE, exportConfig), ConsoleColor.Blue);
-
-            }
-            catch (Exception)
-            {
-                Utils.LogError(AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE + "字段配置错误!使用默认配置!");
-
-                // 使用默认配置
-                exportConfig = AppValues.ExportOption.ExportServerTables;
-            }
-        }
-
+        // 读取配置CONFIG_EXPORT_OPTION_LUA_TABLE获取导出
         // 保存为lua文件
-        if (Utils.SaveLuaFile(tableInfo.TableName, tableInfo.TableName, exportString, exportConfig) == true)
+        if (Utils.SaveLuaFile(tableInfo.TableName, tableInfo.TableName, exportString, GetExportOption(tableInfo)) == true)
         {
             errorString = null;
             return true;
@@ -377,30 +356,9 @@ public class TableExportToLuaHelper
             exportString = string.Concat(columnInfo, System.Environment.NewLine, exportString);
         }
 
-        // 读取配置
-        AppValues.ExportOption exportConfig = AppValues.ExportOption.ExportAllTables;
-
-        if (tableInfo.TableConfig != null &&
-            tableInfo.TableConfig.ContainsKey(AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE) &&
-            tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE].Count > 0)
-        {
-            try
-            {
-                exportConfig = (AppValues.ExportOption)Enum.Parse(typeof(AppValues.ExportOption), tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE][0]);
-                Utils.Log(string.Format("config中发现了{0}配置,参数为:{1}", AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE, exportConfig), ConsoleColor.Blue);
-
-            }
-            catch (Exception)
-            {
-                Utils.LogError(AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE + "字段配置错误!使用默认配置!");
-
-                // 使用默认配置
-                exportConfig = AppValues.ExportOption.ExportServerTables;
-            }
-        }
-
+        // 读取配置CONFIG_EXPORT_OPTION_LUA_TABLE获取导出
         // 保存为lua文件
-        if (Utils.SaveLuaFile(tableInfo.TableName, fileName, exportString, exportConfig) == true)
+        if (Utils.SaveLuaFile(tableInfo.TableName, fileName, exportString, GetExportOption(tableInfo)) == true)
         {
             errorString = null;
             return true;
@@ -410,6 +368,32 @@ public class TableExportToLuaHelper
             errorString = "保存为lua文件失败\n";
             return false;
         }
+    }
+
+    private static AppValues.ExportOption GetExportOption(TableInfo _tableInfo)
+    {
+        AppValues.ExportOption _exportConfig = AppValues.ExportOption.ExportAllTables;
+
+        if (_tableInfo.TableConfig != null &&
+            _tableInfo.TableConfig.ContainsKey(AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE) &&
+            _tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE].Count > 0)
+        {
+            try
+            {
+                _exportConfig = (AppValues.ExportOption)Enum.Parse(typeof(AppValues.ExportOption), _tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE][0]);
+
+                Utils.Log(string.Format("config中发现了{0}配置,参数为:{1}", AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE, _exportConfig), ConsoleColor.Blue);
+            }
+            catch
+            {
+                Utils.LogError(string.Format("{0}表中,{1}字段配置错误!使用默认配置!", _tableInfo.TableName, AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE));
+
+                // 使用默认配置
+                _exportConfig = AppValues.ExportOption.ExportServerTables;
+            }
+        }
+
+        return _exportConfig;
     }
 
     /// <summary>
