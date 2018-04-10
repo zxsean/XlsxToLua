@@ -31,7 +31,11 @@ public class TableExportToLuaHelper
         int currentLevel = 1;
 
         // 判断是否设置要将主键列的值作为导出的table中的元素
-        bool isAddKeyToLuaTable = tableInfo.TableConfig != null && tableInfo.TableConfig.ContainsKey(AppValues.CONFIG_NAME_ADD_KEY_TO_LUA_TABLE) && tableInfo.TableConfig[AppValues.CONFIG_NAME_ADD_KEY_TO_LUA_TABLE].Count > 0 && "true".Equals(tableInfo.TableConfig[AppValues.CONFIG_NAME_ADD_KEY_TO_LUA_TABLE][0], StringComparison.CurrentCultureIgnoreCase);
+        bool isAddKeyToLuaTable = tableInfo.TableConfig != null &&
+                                  tableInfo.TableConfig.ContainsKey(AppValues.CONFIG_NAME_ADD_KEY_TO_LUA_TABLE) &&
+                                  tableInfo.TableConfig[AppValues.CONFIG_NAME_ADD_KEY_TO_LUA_TABLE].Count > 0 &&
+                                  "true".Equals(tableInfo.TableConfig[AppValues.CONFIG_NAME_ADD_KEY_TO_LUA_TABLE][0],
+                                  StringComparison.CurrentCultureIgnoreCase);
 
         // 逐行读取表格内容生成lua table
         List<FieldInfo> allField = tableInfo.GetAllClientFieldInfo();
@@ -96,8 +100,30 @@ public class TableExportToLuaHelper
         if (AppValues.IsNeedColumnInfo == true)
             exportString = _GetColumnInfo(tableInfo) + exportString;
 
+        // 读取配置
+        AppValues.ExportOption exportConfig = AppValues.ExportOption.ExportAllTables;
+
+        if (tableInfo.TableConfig != null &&
+            tableInfo.TableConfig.ContainsKey(AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE) &&
+            tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE].Count > 0)
+        {
+            try
+            {
+                exportConfig = (AppValues.ExportOption)Enum.Parse(typeof(AppValues.ExportOption), tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE][0]);
+                Utils.Log(string.Format("config中发现了{0}配置,参数为:{1}", AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE, exportConfig), ConsoleColor.Blue);
+
+            }
+            catch (Exception)
+            {
+                Utils.LogError(AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE + "字段配置错误!使用默认配置!");
+
+                // 使用默认配置
+                exportConfig = AppValues.ExportOption.ExportServerTables;
+            }
+        }
+
         // 保存为lua文件
-        if (Utils.SaveLuaFile(tableInfo.TableName, tableInfo.TableName, exportString) == true)
+        if (Utils.SaveLuaFile(tableInfo.TableName, tableInfo.TableName, exportString, exportConfig) == true)
         {
             errorString = null;
             return true;
@@ -351,8 +377,30 @@ public class TableExportToLuaHelper
             exportString = string.Concat(columnInfo, System.Environment.NewLine, exportString);
         }
 
+        // 读取配置
+        AppValues.ExportOption exportConfig = AppValues.ExportOption.ExportAllTables;
+
+        if (tableInfo.TableConfig != null &&
+            tableInfo.TableConfig.ContainsKey(AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE) &&
+            tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE].Count > 0)
+        {
+            try
+            {
+                exportConfig = (AppValues.ExportOption)Enum.Parse(typeof(AppValues.ExportOption), tableInfo.TableConfig[AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE][0]);
+                Utils.Log(string.Format("config中发现了{0}配置,参数为:{1}", AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE, exportConfig), ConsoleColor.Blue);
+
+            }
+            catch (Exception)
+            {
+                Utils.LogError(AppValues.CONFIG_EXPORT_OPTION_LUA_TABLE + "字段配置错误!使用默认配置!");
+
+                // 使用默认配置
+                exportConfig = AppValues.ExportOption.ExportServerTables;
+            }
+        }
+
         // 保存为lua文件
-        if (Utils.SaveLuaFile(tableInfo.TableName, fileName, exportString) == true)
+        if (Utils.SaveLuaFile(tableInfo.TableName, fileName, exportString, exportConfig) == true)
         {
             errorString = null;
             return true;

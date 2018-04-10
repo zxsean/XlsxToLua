@@ -485,25 +485,90 @@ public class Utils
     /// <summary>
     /// 将某张Excel表格转换为lua table内容保存到文件
     /// </summary>
-    public static bool SaveLuaFile(string tableName, string fileName, string content)
+    public static bool SaveLuaFile(string tableName, string fileName, string content, AppValues.ExportOption exportConfig)
     {
         try
         {
-            string exportDirectoryPath = GetExportDirectoryPath(tableName, AppValues.ExportLuaFilePath);
-            if (Directory.Exists(exportDirectoryPath) == false)
-                Directory.CreateDirectory(exportDirectoryPath);
+            //string exportDirectoryPath = GetExportDirectoryPath(tableName, AppValues.ExportLuaFilePath);
+            //if (Directory.Exists(exportDirectoryPath) == false)
+            //    Directory.CreateDirectory(exportDirectoryPath);
 
-            string savePath = Utils.CombinePath(exportDirectoryPath, fileName + ".lua");
-            StreamWriter writer = new StreamWriter(savePath, false, new UTF8Encoding(false));
-            writer.Write(content);
-            writer.Flush();
-            writer.Close();
+            //string savePath = Utils.CombinePath(exportDirectoryPath, fileName + ".lua");
+            //StreamWriter writer = new StreamWriter(savePath, false, new UTF8Encoding(false));
+            //writer.Write(content);
+            //writer.Flush();
+            //writer.Close();
+
+            // 2018-4-10 新增导出客户端和服务器分开的2个目录
+            // 全文件路径
+            string allTablePath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName);
+
+            // 客户端
+            string clientPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableClientPathName);
+            // 服务器
+            string serverPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableServerPathName);
+
+            // 创建基础版本
+            string exportDirectoryPath = GetExportDirectoryPath(tableName, allTablePath);
+
+            // 导出基础版本
+            WriteLuaFile(fileName, content, exportDirectoryPath);
+
+            switch (exportConfig)
+            {
+                case  AppValues.ExportOption.ExportAllTables:
+                    {
+                        Log(string.Format("\"{0}\"导出客户端和服务器配置", fileName), ConsoleColor.Green);
+
+                        WriteLuaFile(fileName, content, clientPath);
+                        WriteLuaFile(fileName, content, serverPath);
+
+                        break;
+                    }
+                case AppValues.ExportOption.ExportClientTables:
+                    {
+                        Log(string.Format("\"{0}\"只导出客户端配置", fileName), ConsoleColor.Green);
+
+                        WriteLuaFile(fileName, content, clientPath);
+
+                        break;
+                    }
+                case AppValues.ExportOption.ExportServerTables:
+                    {
+                        Log(string.Format("\"{0}\"只导出服务器配置", fileName), ConsoleColor.Green);
+
+                        WriteLuaFile(fileName, content, serverPath);
+
+                        break;
+                    }
+            }
+
             return true;
         }
         catch
         {
             return false;
         }
+    }
+
+    /// <summary>
+    /// 写入lua文件
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <param name="content"></param>
+    /// <param name="exportDirectoryPath"></param>
+    private static void WriteLuaFile(string fileName, string content, string exportDirectoryPath)
+    {
+        if (Directory.Exists(exportDirectoryPath) == false)
+        {
+            Directory.CreateDirectory(exportDirectoryPath);
+        }
+
+        string savePath = Utils.CombinePath(exportDirectoryPath, fileName + ".lua");
+        StreamWriter writer = new StreamWriter(savePath, false, new UTF8Encoding(false));
+        writer.Write(content);
+        writer.Flush();
+        writer.Close();
     }
 
     public static bool SaveCsvFile(string tableName, List<StringBuilder> rowContentList)

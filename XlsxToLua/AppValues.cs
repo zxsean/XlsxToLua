@@ -292,6 +292,11 @@ public class AppValues
     // 声明对某张表格不进行默认导出的参数配置
     public const string CONFIG_PARAM_NOT_EXPORT_ORIGINAL_TABLE = "-notExportOriginalTable";
 
+    /// <summary>
+    /// 声明对某张表格导出时是否都导出还是可选客户端或者服务器导出
+    /// </summary>
+    public const string CONFIG_EXPORT_OPTION_LUA_TABLE = "exportOption";
+
     // 以下为config配置文件中配置项的key名
     // MySQL连接字符串
     public const string APP_CONFIG_KEY_MYSQL_CONNECT_STRING = "connectMySQLString";
@@ -601,6 +606,39 @@ public class AppValues
     /// 导出属性格式
     /// </summary>
     public static bool ExportClassPropertyStyle = true;
+
+    #endregion
+
+    #region 客户端服务器分开导出功能
+
+    public const string ExceptExportTableClientPathName = @"ClientTables";
+
+    public const string ExceptExportTableServerPathName = @"ServerTables";
+
+    public const string ExceptExportTablePathName = @"AllTables";
+
+    public enum ExportOption
+    {
+        /// <summary>
+        /// 未定义错误
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// 导出所有表
+        /// </summary>
+        ExportAllTables,
+
+        /// <summary>
+        /// 只导出客户端表
+        /// </summary>
+        ExportClientTables,
+
+        /// <summary>
+        /// 只导出服务器表
+        /// </summary>
+        ExportServerTables,
+    }
 
     #endregion
 }
