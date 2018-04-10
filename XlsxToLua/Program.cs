@@ -1036,6 +1036,9 @@ public class Program
         }
         if (isTableAllRight == true)
         {
+            List<string> _listClient = new List<string>();
+            List<string> _listServer = new List<string>();
+
             Utils.Log("\n表格检查完毕，没有发现错误，开始导出为lua文件\n");
             // 进行表格导出
             foreach (var item in AppValues.ExportTableNameAndPath)
@@ -1046,6 +1049,47 @@ public class Program
                 string errorString = null;
                 Utils.Log(string.Format("导出表格\"{0}\"：", tableInfo.TableName), ConsoleColor.Green);
                 bool isNeedExportOriginalTable = true;
+
+                // ------------
+                var _exportConfigSetOption = GetExportConfigSetOption(tableInfo);
+
+                // 导出
+                if (_exportConfigSetOption != AppValues.ExportConfigSetOption.NoExport)
+                {
+                    string _tableNameWithDirectoryName = Utils.GetLuaNameFromTableInfo(tableInfo);
+
+                    switch (_exportConfigSetOption)
+                    {
+                        case AppValues.ExportConfigSetOption.None:
+                            {
+                                _listClient.Add(_tableNameWithDirectoryName);
+                                _listServer.Add(_tableNameWithDirectoryName);
+
+                                Utils.Log(string.Format("\r\n添加文件_{0}_(TableName{1})_进[客户端和服务器]ConfigSet.\r\n", _tableNameWithDirectoryName, tableName), ConsoleColor.Green);
+
+                                break;
+                            }
+                        case AppValues.ExportConfigSetOption.ExportClientTables:
+                            {
+                                _listClient.Add(_tableNameWithDirectoryName);
+
+                                Utils.Log(string.Format("\r\n添加文件_{0}_(TableName{1})_进[客户端]ConfigSet.\r\n", _tableNameWithDirectoryName, tableName), ConsoleColor.Green);
+
+                                break;
+                            }
+                        case AppValues.ExportConfigSetOption.ExportServerTables:
+                            {
+                                _listServer.Add(_tableNameWithDirectoryName);
+
+                                Utils.Log(string.Format("\r\n添加文件_{0}_(TableName{1})_进[服务器]ConfigSet.\r\n", _tableNameWithDirectoryName, tableName), ConsoleColor.Green);
+
+                                break;
+                            }
+                    }
+                }
+
+                // ------------
+
                 // 判断是否设置了特殊导出规则
                 if (tableInfo.TableConfig != null && tableInfo.TableConfig.ContainsKey(AppValues.CONFIG_NAME_EXPORT))
                 {
@@ -1119,6 +1163,46 @@ public class Program
                 }
             }
 
+            // ============================================
+            Utils.Log("--------------开始生成ConfigSet文件--------------");
+
+            //StringBuilder content = new StringBuilder();
+
+            //// 生成数据内容开头
+            //content.AppendLine("return {");
+
+            //for (int i = 0; i < _listClient.Count; ++i)
+            //{
+            //    Utils.Log("_____________________list:" + _listClient[i]);
+            //    content.Append("\t");
+            //    content.AppendLine(string.Format("\"{0}\",", _listClient[i]));
+            //}
+
+            //// 生成数据内容结尾
+            //content.AppendLine("}");
+
+            //string exportString = content.ToString();
+
+            //string allTablePath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName);
+
+            ////// 客户端
+            ////string clientPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableClientPathName);
+            ////// 服务器
+            ////string serverPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableServerPathName);
+
+            //// 保存为lua文件
+            //Utils.WriteLuaFile("ConfigSet", exportString, allTablePath);
+
+            // 需要生成3份
+            Utils.WriteLuaConfigSetFile("ConfigSet_S", _listServer, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableServerPathName));
+            Utils.WriteLuaConfigSetFile("ConfigSet_S", _listServer, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName));
+
+            Utils.WriteLuaConfigSetFile("ConfigSet_C", _listClient, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableClientPathName));
+            Utils.WriteLuaConfigSetFile("ConfigSet_C", _listClient, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName));
+
+            Utils.Log("=====导出Lua配置整表完成=====", ConsoleColor.Green);
+            // ============================================
+
             Utils.Log("\n导出lua文件完毕\n");
 
             // 进行数据库导出
@@ -1151,5 +1235,37 @@ public class Program
 
         Utils.Log("\n按任意键退出本工具");
         Console.ReadKey();
+    }
+
+    /// <summary>
+    /// 获取ConfigSet导出配置
+    /// </summary>
+    /// <param name="_tableInfo"></param>
+    /// <returns></returns>
+    private static AppValues.ExportConfigSetOption GetExportConfigSetOption(TableInfo _tableInfo)
+    {
+        AppValues.ExportConfigSetOption _exportConfigSetOption = AppValues.ExportConfigSetOption.None;
+
+        // 判断是否设置了ConfigSet导出规则
+        if (_tableInfo.TableConfig != null &&
+            _tableInfo.TableConfig.ContainsKey(AppValues.CONFIG_EXPORT_CONFIG_SET_OPTION_TABLE) &&
+            _tableInfo.TableConfig[AppValues.CONFIG_EXPORT_CONFIG_SET_OPTION_TABLE].Count > 0)
+        {
+            try
+            {
+                _exportConfigSetOption = (AppValues.ExportConfigSetOption)Enum.Parse(typeof(AppValues.ExportConfigSetOption),
+                                                                                     _tableInfo.TableConfig[AppValues.CONFIG_EXPORT_CONFIG_SET_OPTION_TABLE][0]);
+            }
+            catch
+            {
+                Utils.LogError(string.Format("{0}表中,{1}字段配置错误!使用默认配置!",
+                                              _tableInfo.TableName,
+                                              AppValues.CONFIG_EXPORT_CONFIG_SET_OPTION_TABLE));
+
+                _exportConfigSetOption = AppValues.ExportConfigSetOption.None;
+            }
+        }
+
+        return _exportConfigSetOption;
     }
 }
