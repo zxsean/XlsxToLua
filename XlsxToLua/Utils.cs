@@ -479,7 +479,9 @@ public class Utils
             return Path.GetDirectoryName(CombinePath(exportRootPath, Uri.UnescapeDataString(relativeUri.ToString())));
         }
         else
+        {
             return exportRootPath;
+        }
     }
 
     /// <summary>
@@ -545,8 +547,10 @@ public class Utils
 
             return true;
         }
-        catch
+        catch(Exception ex)
         {
+            LogError(ex.ToString());
+
             return false;
         }
     }
@@ -557,7 +561,7 @@ public class Utils
     /// <param name="fileName"></param>
     /// <param name="content"></param>
     /// <param name="exportDirectoryPath"></param>
-    private static void WriteLuaFile(string fileName, string content, string exportDirectoryPath)
+    public static void WriteLuaFile(string fileName, string content, string exportDirectoryPath)
     {
         if (Directory.Exists(exportDirectoryPath) == false)
         {
@@ -569,6 +573,42 @@ public class Utils
         writer.Write(content);
         writer.Flush();
         writer.Close();
+    }
+
+    /// <summary>
+    /// 生成ConfigSet文件
+    /// </summary>
+    /// <param name="_fileName"></param>
+    /// <param name="_contentList"></param>
+    /// <param name="_path"></param>
+    public static void WriteLuaConfigSetFile(string _fileName, List<string> _contentList, string _path)
+    {
+        StringBuilder _content = new StringBuilder();
+
+        // 生成数据内容开头
+        _content.AppendLine("return {");
+
+        for (int i = 0; i < _contentList.Count; ++i)
+        {
+            //Utils.Log("_____________________list:" + _contentList[i]);
+            _content.Append("\t");
+            _content.AppendLine(string.Format("\"{0}\",", _contentList[i]));
+        }
+
+        // 生成数据内容结尾
+        _content.AppendLine("}");
+
+        string _exportString = _content.ToString();
+
+        //string _allTablePath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName);
+
+        //// 客户端
+        //string clientPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableClientPathName);
+        //// 服务器
+        //string serverPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableServerPathName);
+
+        // 保存为lua文件
+        WriteLuaFile(_fileName, _exportString, _path);
     }
 
     public static bool SaveCsvFile(string tableName, List<StringBuilder> rowContentList)
@@ -675,6 +715,29 @@ public class Utils
             path2 = path2.Substring(1, path2.Length - 1);
 
         return Path.Combine(path1, path2);
+    }
+
+    /// <summary>
+    /// 通过table的名字获取在ConfigSet中显示的名字
+    /// </summary>
+    /// <param name="_tableInfo"></param>
+    /// <returns></returns>
+    public static string GetLuaNameFromTableInfo(TableInfo _tableInfo)
+    {
+        // 获取文件名
+        string _tableNameWithDirectoryName = Utils.GetExportDirectoryPath(_tableInfo.TableName, "");
+        _tableNameWithDirectoryName = _tableNameWithDirectoryName.Replace('\\', '/');
+
+        int _index = _tableNameWithDirectoryName.IndexOf('/');
+        if (_index >= 0)
+        {
+            _tableNameWithDirectoryName = _tableNameWithDirectoryName.Remove(_index, 1);
+        }
+
+        _tableNameWithDirectoryName = Path.Combine(_tableNameWithDirectoryName, _tableInfo.TableName);
+        _tableNameWithDirectoryName = _tableNameWithDirectoryName.Replace('\\', '/');
+
+        return _tableNameWithDirectoryName;
     }
 }
 
