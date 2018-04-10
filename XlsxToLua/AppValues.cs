@@ -297,6 +297,11 @@ public class AppValues
     /// </summary>
     public const string CONFIG_EXPORT_OPTION_LUA_TABLE = "exportOption";
 
+    /// <summary>
+    /// 声明对某张表格导出时导出ConfigSet(配置整表)的选项
+    /// </summary>
+    public const string CONFIG_EXPORT_CONFIG_SET_OPTION_TABLE = "exportConfigSetOption";
+
     // 以下为config配置文件中配置项的key名
     // MySQL连接字符串
     public const string APP_CONFIG_KEY_MYSQL_CONNECT_STRING = "connectMySQLString";
@@ -628,6 +633,32 @@ public class AppValues
         /// 导出所有表
         /// </summary>
         ExportAllTables,
+
+        /// <summary>
+        /// 只导出客户端表
+        /// </summary>
+        ExportClientTables,
+
+        /// <summary>
+        /// 只导出服务器表
+        /// </summary>
+        ExportServerTables,
+    }
+
+    /// <summary>
+    /// 导出ConfigSet配置
+    /// </summary>
+    public enum ExportConfigSetOption
+    {
+        /// <summary>
+        /// 未定义错误
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// 不导出
+        /// </summary>
+        NoExport,
 
         /// <summary>
         /// 只导出客户端表
