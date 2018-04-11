@@ -1205,6 +1205,8 @@ public class Program
 
             Utils.Log("\n导出lua文件完毕\n");
 
+            Utils.Log("\n" + Utils.__PIC);
+
             // 进行数据库导出
             if (AppValues.IsExportMySQL == true)
             {
