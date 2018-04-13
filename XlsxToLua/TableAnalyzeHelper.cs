@@ -1976,7 +1976,7 @@ public class TableAnalyzeHelper
     /// <summary>
     /// 获取某张表格的配置参数（key：参数名， value：参数列表）
     /// </summary>
-    public static Dictionary<string, List<string>> GetTableConfig(DataTable dt, out string errorString)
+    public static Dictionary<string, List<string>> GetTableConfig(string tableName, DataTable dt, out string errorString)
     {
         Dictionary<string, List<string>> config = new Dictionary<string, List<string>>();
         int rowCount = dt.Rows.Count;
@@ -1992,7 +1992,7 @@ public class TableAnalyzeHelper
             {
                 if (config.ContainsKey(paramName))
                 {
-                    errorString = string.Format("错误：表格{0}的配置表中存在相同的参数名{1}，请修正错误后重试\n");
+                    errorString = string.Format("错误：表格{0}的配置表中存在相同的参数名{1}，请修正错误后重试\n", tableName, paramName);
                     return null;
                 }
                 else

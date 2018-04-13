@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 // 注意：要在本项目属性的“生成”选项卡中将“目标平台”由默认的“Any CPU”改为“x86”，
 // 否则即便安装了AccessDatabaseEngine，在64位系统安装32位Office（Microsoft.ACE.OLEDB.12.0也就是32位的），然后64位的VS默认编译为64位程序仍将导致无法连接Excel，提示本机未注册Microsoft.ACE.OLEDB.12.0提供程序
@@ -38,6 +39,9 @@ public class Program
     /// </summary>
     static void Main(string[] args)
     {
+#if DEBUG
+        Console.ReadLine();
+#endif
         // 检查第1个参数（Excel表格所在目录）是否正确
         if (args.Length < 1)
             Utils.LogErrorAndExit("错误：未输入Excel表格所在目录");
@@ -106,7 +110,9 @@ public class Program
                 // 检查Excel文件所在目录及其子目录下都不存在同名文件
                 // 记录重名文件所在目录
                 Dictionary<string, List<string>> sameExcelNameInfo = new Dictionary<string, List<string>>();
-                foreach (string filePath in Directory.GetFiles(AppValues.ExcelFolderPath, "*.xlsx", SearchOption.AllDirectories))
+                //foreach (string filePath in Directory.GetFiles(AppValues.ExcelFolderPath, "*.xlsx", SearchOption.AllDirectories))
+                foreach (string filePath in Directory.GetFiles(AppValues.ExcelFolderPath, "*.xls", SearchOption.AllDirectories).
+                                                               Where(_fn => _fn.EndsWith(".xlsx") || _fn.EndsWith(".xlsm")))
                 {
                     string fileName = Path.GetFileNameWithoutExtension(filePath);
                     if (fileName.StartsWith(AppValues.EXCEL_TEMP_FILE_FILE_NAME_START_STRING))
@@ -153,7 +159,9 @@ public class Program
         }
         if (AppValues.IsExportIncludeSubfolder == false)
         {
-            foreach (string filePath in Directory.GetFiles(AppValues.ExcelFolderPath, "*.xlsx", SearchOption.TopDirectoryOnly))
+            //foreach (string filePath in Directory.GetFiles(AppValues.ExcelFolderPath, "*.xlsx", SearchOption.TopDirectoryOnly).
+            foreach (string filePath in Directory.GetFiles(AppValues.ExcelFolderPath, "*.xls", SearchOption.TopDirectoryOnly).
+                                                           Where(_fn => _fn.EndsWith(".xlsx") || _fn.EndsWith(".xlsm")))
             {
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
                 if (fileName.StartsWith(AppValues.EXCEL_TEMP_FILE_FILE_NAME_START_STRING))
@@ -976,7 +984,11 @@ public class Program
         Utils.Log(string.Format("开始解析Excel所在目录下的所有Excel文件（{0}）：", AppValues.IsExportIncludeSubfolder == true ? "包含子目录中的Excel文件" : "不包含子目录中的Excel文件"));
         Stopwatch stopwatch = new Stopwatch();
         // 注意：不管Excel表格本次是否需要进行导出，都要进行解析，因为其他表格中可能含有对那些表格的引用检查
-        string[] excelFilePath = Directory.GetFiles(AppValues.ExcelFolderPath, "*.xlsx", AppValues.IsExportIncludeSubfolder == true ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+        //string[] excelFilePath = Directory.GetFiles(AppValues.ExcelFolderPath, "*.xlsx", AppValues.IsExportIncludeSubfolder == true ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+        string[] excelFilePath = Directory.GetFiles(AppValues.ExcelFolderPath, "*.xls",
+                                                    AppValues.IsExportIncludeSubfolder == true ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly).
+                                                    Where(_fileName => _fileName.EndsWith(".xlsm") || _fileName.EndsWith(".xlsx")).ToArray();
+
         foreach (string filePath in excelFilePath)
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -1001,7 +1013,7 @@ public class Program
                     // 如果有表格配置进行解析
                     if (ds.Tables[AppValues.EXCEL_CONFIG_SHEET_NAME] != null)
                     {
-                        tableInfo.TableConfig = TableAnalyzeHelper.GetTableConfig(ds.Tables[AppValues.EXCEL_CONFIG_SHEET_NAME], out errorString);
+                        tableInfo.TableConfig = TableAnalyzeHelper.GetTableConfig(tableInfo.TableName, ds.Tables[AppValues.EXCEL_CONFIG_SHEET_NAME], out errorString);
                         if (!string.IsNullOrEmpty(errorString))
                             Utils.LogErrorAndExit(string.Format("错误：解析表格{0}的配置失败\n{1}", fileName, errorString));
                     }
@@ -1203,10 +1215,10 @@ public class Program
             Utils.Log("=====导出Lua配置整表完成=====", ConsoleColor.Green);
             // ============================================
 
-            Utils.Log("\n导出lua文件完毕\n");
-
             Utils.Log("\n" + Utils.__PIC);
-
+            
+            Utils.Log("\n导出lua文件完毕\n");
+            
             // 进行数据库导出
             if (AppValues.IsExportMySQL == true)
             {
