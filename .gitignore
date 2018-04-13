@@ -1,5 +1,7 @@
 /XlsxToLua/.vs
-/TestRSConfig
 /XlsxToLuaGUI/.vs
 /XlsxToLuaGUI/obj
 /XlsxToLua/obj
+/XlsxToLua/bin/Debug/XlsxToLua.pdb
+/XlsxToLua/bin/Release/XlsxToLua.pdb
+/XlsxToLuaGUI/bin/Release/XlsxToLuaGUI.pdb
