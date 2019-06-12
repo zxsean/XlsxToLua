@@ -1076,7 +1076,7 @@ public class Program
                                 _listClient.Add(_tableNameWithDirectoryName);
                                 _listServer.Add(_tableNameWithDirectoryName);
 
-                                Utils.Log(string.Format("\r\n添加文件_{0}_(TableName{1})_进[客户端和服务器]ConfigSet.\r\n", _tableNameWithDirectoryName, tableName), ConsoleColor.Green);
+                                // Utils.Log(string.Format("\r\n添加文件_{0}_(TableName{1})_进[客户端和服务器]ConfigSet.\r\n", _tableNameWithDirectoryName, tableName), ConsoleColor.Green);
 
                                 break;
                             }
@@ -1084,7 +1084,7 @@ public class Program
                             {
                                 _listClient.Add(_tableNameWithDirectoryName);
 
-                                Utils.Log(string.Format("\r\n添加文件_{0}_(TableName{1})_进[客户端]ConfigSet.\r\n", _tableNameWithDirectoryName, tableName), ConsoleColor.Green);
+                                // Utils.Log(string.Format("\r\n添加文件_{0}_(TableName{1})_进[客户端]ConfigSet.\r\n", _tableNameWithDirectoryName, tableName), ConsoleColor.Green);
 
                                 break;
                             }
@@ -1092,7 +1092,7 @@ public class Program
                             {
                                 _listServer.Add(_tableNameWithDirectoryName);
 
-                                Utils.Log(string.Format("\r\n添加文件_{0}_(TableName{1})_进[服务器]ConfigSet.\r\n", _tableNameWithDirectoryName, tableName), ConsoleColor.Green);
+                                // Utils.Log(string.Format("\r\n添加文件_{0}_(TableName{1})_进[服务器]ConfigSet.\r\n", _tableNameWithDirectoryName, tableName), ConsoleColor.Green);
 
                                 break;
                             }
