@@ -37,11 +37,10 @@ public class Program
     ///     -exportJson（后面在英文小括号内声明本次要额外导出json文件的Excel文件名，用|分隔，或者用$all表示全部。注意如果-part参数中未指定本次要导出某个Excel表，即便声明要导出json文件也不会生效）
     ///     -exportJsonParam（可声明导出json文件的参数）
     /// </summary>
-    static void Main(string[] args)
+    static int Main(string[] args)
     {
-#if DEBUG
-        Console.ReadLine();
-#endif
+        int errorLevel = 0;
+
         // 检查第1个参数（Excel表格所在目录）是否正确
         if (args.Length < 1)
             Utils.LogErrorAndExit("错误：未输入Excel表格所在目录");
@@ -435,7 +434,7 @@ public class Program
                 int paramLeftBracketIndex = param.IndexOf('(');
                 int paramRightBracketIndex = param.LastIndexOf(')');
                 if (paramLeftBracketIndex == -1 || paramRightBracketIndex == -1 || paramLeftBracketIndex > paramRightBracketIndex)
-                    Utils.LogErrorAndExit(string.Format("必须在英文小括号内声明要导出为csv文件的Excel表格名，若要全部导出，请配置为{1}参数", AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING));
+                    Utils.LogErrorAndExit(string.Format("必须在英文小括号内声明要导出为csv文件的Excel表格名，若要全部导出，请配置为{0}参数", AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING));
 
                 string exportCsvFileWithoutBracket = param.Substring(paramLeftBracketIndex + 1, paramRightBracketIndex - paramLeftBracketIndex - 1).Trim();
                 if (exportCsvFileWithoutBracket.Equals(AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING, StringComparison.CurrentCultureIgnoreCase))
@@ -564,7 +563,7 @@ public class Program
                 int paramLeftBracketIndex = param.IndexOf('(');
                 int paramRightBracketIndex = param.LastIndexOf(')');
                 if (paramLeftBracketIndex == -1 || paramRightBracketIndex == -1 || paramLeftBracketIndex > paramRightBracketIndex)
-                    Utils.LogErrorAndExit(string.Format("必须在英文小括号内声明要导出为csv对应C#类文件的Excel表格名，若要全部导出，请配置为{1}参数", AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING));
+                    Utils.LogErrorAndExit(string.Format("必须在英文小括号内声明要导出为csv对应C#类文件的Excel表格名，若要全部导出，请配置为{0}参数", AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING));
 
                 string exportCsClassFileWithoutBracket = param.Substring(paramLeftBracketIndex + 1, paramRightBracketIndex - paramLeftBracketIndex - 1).Trim();
                 if (exportCsClassFileWithoutBracket.Equals(AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING, StringComparison.CurrentCultureIgnoreCase))
@@ -712,7 +711,7 @@ public class Program
                 int paramLeftBracketIndex = param.IndexOf('(');
                 int paramRightBracketIndex = param.LastIndexOf(')');
                 if (paramLeftBracketIndex == -1 || paramRightBracketIndex == -1 || paramLeftBracketIndex > paramRightBracketIndex)
-                    Utils.LogErrorAndExit(string.Format("必须在英文小括号内声明要导出为csv对应Java类文件的Excel表格名，若要全部导出，请配置为{1}参数", AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING));
+                    Utils.LogErrorAndExit(string.Format("必须在英文小括号内声明要导出为csv对应Java类文件的Excel表格名，若要全部导出，请配置为{0}参数", AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING));
 
                 string exportJavaClassFileWithoutBracket = param.Substring(paramLeftBracketIndex + 1, paramRightBracketIndex - paramLeftBracketIndex - 1).Trim();
                 if (exportJavaClassFileWithoutBracket.Equals(AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING, StringComparison.CurrentCultureIgnoreCase))
@@ -838,7 +837,7 @@ public class Program
                 int paramLeftBracketIndex = param.IndexOf('(');
                 int paramRightBracketIndex = param.LastIndexOf(')');
                 if (paramLeftBracketIndex == -1 || paramRightBracketIndex == -1 || paramLeftBracketIndex > paramRightBracketIndex)
-                    Utils.LogErrorAndExit(string.Format("必须在英文小括号内声明要导出为json文件的Excel表格名，若要全部导出，请配置为{1}参数", AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING));
+                    Utils.LogErrorAndExit(string.Format("必须在英文小括号内声明要导出为json文件的Excel表格名，若要全部导出，请配置为{0}参数", AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING));
 
                 string exportJsonFileWithoutBracket = param.Substring(paramLeftBracketIndex + 1, paramRightBracketIndex - paramLeftBracketIndex - 1).Trim();
                 if (exportJsonFileWithoutBracket.Equals(AppValues.EXPORT_ALL_TO_EXTRA_FILE_PARAM_STRING, StringComparison.CurrentCultureIgnoreCase))
@@ -1175,45 +1174,19 @@ public class Program
                 }
             }
 
-            // ============================================
-            Utils.Log("--------------开始生成ConfigSet文件--------------");
+            // 2019-6-12 屏蔽这部分导出代码
+            //// ============================================
+            //Utils.Log("--------------开始生成ConfigSet文件--------------");
 
-            //StringBuilder content = new StringBuilder();
+            //// 需要生成3份
+            //Utils.WriteLuaConfigSetFile("ConfigSet_S", _listServer, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableServerPathName));
+            //Utils.WriteLuaConfigSetFile("ConfigSet_S", _listServer, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName));
 
-            //// 生成数据内容开头
-            //content.AppendLine("return {");
+            //Utils.WriteLuaConfigSetFile("ConfigSet_C", _listClient, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableClientPathName));
+            //Utils.WriteLuaConfigSetFile("ConfigSet_C", _listClient, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName));
 
-            //for (int i = 0; i < _listClient.Count; ++i)
-            //{
-            //    Utils.Log("_____________________list:" + _listClient[i]);
-            //    content.Append("\t");
-            //    content.AppendLine(string.Format("\"{0}\",", _listClient[i]));
-            //}
-
-            //// 生成数据内容结尾
-            //content.AppendLine("}");
-
-            //string exportString = content.ToString();
-
-            //string allTablePath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName);
-
-            ////// 客户端
-            ////string clientPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableClientPathName);
-            ////// 服务器
-            ////string serverPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableServerPathName);
-
-            //// 保存为lua文件
-            //Utils.WriteLuaFile("ConfigSet", exportString, allTablePath);
-
-            // 需要生成3份
-            Utils.WriteLuaConfigSetFile("ConfigSet_S", _listServer, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableServerPathName));
-            Utils.WriteLuaConfigSetFile("ConfigSet_S", _listServer, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName));
-
-            Utils.WriteLuaConfigSetFile("ConfigSet_C", _listClient, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableClientPathName));
-            Utils.WriteLuaConfigSetFile("ConfigSet_C", _listClient, Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName));
-
-            Utils.Log("=====导出Lua配置整表完成=====", ConsoleColor.Green);
-            // ============================================
+            //Utils.Log("=====导出Lua配置整表完成=====", ConsoleColor.Green);
+            //// ============================================
 
             Utils.Log("\n" + Utils.__PIC);
             
@@ -1245,10 +1218,12 @@ public class Program
             Utils.LogError("\n表格检查完毕，但存在上面所列错误，必须全部修正后才可以进行表格导出\n");
             // 将错误信息全部输出保存到txt文件中
             Utils.SaveErrorInfoToFile();
+            errorLevel = -1;
         }
 
-        Utils.Log("\n按任意键退出本工具");
+        Utils.Log("\n导出完毕", ConsoleColor.Green);
         Console.ReadKey();
+        return errorLevel;
     }
 
     /// <summary>

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lbExcelFolderPath = new System.Windows.Forms.Label();
             this.tbExcelFolderPath = new System.Windows.Forms.TextBox();
             this.btnChooseExcelFolderPath = new System.Windows.Forms.Button();
@@ -132,7 +133,9 @@
             // 
             // tbExcelFolderPath
             // 
+            this.tbExcelFolderPath.AllowDrop = true;
             this.tbExcelFolderPath.Location = new System.Drawing.Point(138, 61);
+            this.tbExcelFolderPath.Margin = new System.Windows.Forms.Padding(4);
             this.tbExcelFolderPath.Name = "tbExcelFolderPath";
             this.tbExcelFolderPath.Size = new System.Drawing.Size(366, 21);
             this.tbExcelFolderPath.TabIndex = 1;
@@ -158,7 +161,9 @@
             // 
             // tbExportLuaFolderPath
             // 
+            this.tbExportLuaFolderPath.AllowDrop = true;
             this.tbExportLuaFolderPath.Location = new System.Drawing.Point(138, 98);
+            this.tbExportLuaFolderPath.Margin = new System.Windows.Forms.Padding(4);
             this.tbExportLuaFolderPath.Name = "tbExportLuaFolderPath";
             this.tbExportLuaFolderPath.Size = new System.Drawing.Size(366, 21);
             this.tbExportLuaFolderPath.TabIndex = 4;
@@ -184,7 +189,9 @@
             // 
             // tbClientFolderPath
             // 
+            this.tbClientFolderPath.AllowDrop = true;
             this.tbClientFolderPath.Location = new System.Drawing.Point(138, 132);
+            this.tbClientFolderPath.Margin = new System.Windows.Forms.Padding(4);
             this.tbClientFolderPath.Name = "tbClientFolderPath";
             this.tbClientFolderPath.Size = new System.Drawing.Size(366, 21);
             this.tbClientFolderPath.TabIndex = 7;
@@ -210,7 +217,9 @@
             // 
             // tbLangFilePath
             // 
+            this.tbLangFilePath.AllowDrop = true;
             this.tbLangFilePath.Location = new System.Drawing.Point(138, 166);
+            this.tbLangFilePath.Margin = new System.Windows.Forms.Padding(4);
             this.tbLangFilePath.Name = "tbLangFilePath";
             this.tbLangFilePath.Size = new System.Drawing.Size(366, 21);
             this.tbLangFilePath.TabIndex = 10;
@@ -287,7 +296,9 @@
             // 
             // tbPartExcelNames
             // 
+            this.tbPartExcelNames.AllowDrop = true;
             this.tbPartExcelNames.Location = new System.Drawing.Point(69, 426);
+            this.tbPartExcelNames.Margin = new System.Windows.Forms.Padding(4);
             this.tbPartExcelNames.Name = "tbPartExcelNames";
             this.tbPartExcelNames.Size = new System.Drawing.Size(435, 21);
             this.tbPartExcelNames.TabIndex = 18;
@@ -354,7 +365,9 @@
             // 
             // tbProgramPath
             // 
+            this.tbProgramPath.AllowDrop = true;
             this.tbProgramPath.Location = new System.Drawing.Point(138, 24);
+            this.tbProgramPath.Margin = new System.Windows.Forms.Padding(4);
             this.tbProgramPath.Name = "tbProgramPath";
             this.tbProgramPath.Size = new System.Drawing.Size(366, 21);
             this.tbProgramPath.TabIndex = 25;
@@ -403,8 +416,9 @@
             // 
             // tbExportCsvTableNames
             // 
+            this.tbExportCsvTableNames.AllowDrop = true;
             this.tbExportCsvTableNames.Location = new System.Drawing.Point(934, 50);
-            this.tbExportCsvTableNames.Margin = new System.Windows.Forms.Padding(2);
+            this.tbExportCsvTableNames.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbExportCsvTableNames.Name = "tbExportCsvTableNames";
             this.tbExportCsvTableNames.Size = new System.Drawing.Size(206, 21);
             this.tbExportCsvTableNames.TabIndex = 30;
@@ -536,8 +550,9 @@
             // 
             // tbExportJsonTableNames
             // 
+            this.tbExportJsonTableNames.AllowDrop = true;
             this.tbExportJsonTableNames.Location = new System.Drawing.Point(298, 536);
-            this.tbExportJsonTableNames.Margin = new System.Windows.Forms.Padding(2);
+            this.tbExportJsonTableNames.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tbExportJsonTableNames.Name = "tbExportJsonTableNames";
             this.tbExportJsonTableNames.Size = new System.Drawing.Size(206, 21);
             this.tbExportJsonTableNames.TabIndex = 43;
@@ -634,7 +649,9 @@
             // 
             // tbExceptExcelNames
             // 
+            this.tbExceptExcelNames.AllowDrop = true;
             this.tbExceptExcelNames.Location = new System.Drawing.Point(69, 478);
+            this.tbExceptExcelNames.Margin = new System.Windows.Forms.Padding(4);
             this.tbExceptExcelNames.Name = "tbExceptExcelNames";
             this.tbExceptExcelNames.Size = new System.Drawing.Size(435, 21);
             this.tbExceptExcelNames.TabIndex = 53;
@@ -670,7 +687,9 @@
             // 
             // tbExportCsClassTableNames
             // 
+            this.tbExportCsClassTableNames.AllowDrop = true;
             this.tbExportCsClassTableNames.Location = new System.Drawing.Point(934, 255);
+            this.tbExportCsClassTableNames.Margin = new System.Windows.Forms.Padding(4);
             this.tbExportCsClassTableNames.Name = "tbExportCsClassTableNames";
             this.tbExportCsClassTableNames.Size = new System.Drawing.Size(206, 21);
             this.tbExportCsClassTableNames.TabIndex = 57;
@@ -805,7 +824,9 @@
             // 
             // tbExportJavaClassTableNames
             // 
+            this.tbExportJavaClassTableNames.AllowDrop = true;
             this.tbExportJavaClassTableNames.Location = new System.Drawing.Point(934, 440);
+            this.tbExportJavaClassTableNames.Margin = new System.Windows.Forms.Padding(4);
             this.tbExportJavaClassTableNames.Name = "tbExportJavaClassTableNames";
             this.tbExportJavaClassTableNames.Size = new System.Drawing.Size(206, 21);
             this.tbExportJavaClassTableNames.TabIndex = 73;
@@ -1078,6 +1099,7 @@
             this.Controls.Add(this.tbExcelFolderPath);
             this.Controls.Add(this.lbExcelFolderPath);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

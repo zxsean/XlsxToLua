@@ -146,7 +146,7 @@ public class TableExportToLuaHelper
         List<string> integrityCheckRules = new List<string>();
         if (indexFieldDefine.Length < 1)
         {
-            errorString = string.Format("导出配置\"{0}\"定义错误，用于索引的字段不能为空，请按fileName:indexFieldName1-indexFieldName2{otherFieldName1,otherFieldName2}的格式配置\n", exportRule);
+            errorString = string.Format("导出配置\"{0}\"定义错误，用于索引的字段不能为空，请按fileName:indexFieldName1-indexFieldName2{{otherFieldName1,otherFieldName2}}的格式配置\n", exportRule);
             return false;
         }
         // 检查字段是否存在且为int、float、string或lang型
@@ -236,7 +236,7 @@ public class TableExportToLuaHelper
             string[] fieldNames = tableValueFieldName.Split(new char[] { ',' }, System.StringSplitOptions.RemoveEmptyEntries);
             if (fieldNames.Length < 1)
             {
-                errorString = string.Format("导出配置\"{0}\"定义错误，花括号中声明的table value中的字段不能为空，请按fileName:indexFieldName1-indexFieldName2{otherFieldName1,otherFieldName2}的格式配置\n", exportRule);
+                errorString = string.Format("导出配置\"{0}\"定义错误，花括号中声明的table value中的字段不能为空，请按fileName:indexFieldName1-indexFieldName2{{otherFieldName1,otherFieldName2}}的格式配置\n", exportRule);
                 return false;
             }
             // 检查字段是否存在
@@ -665,7 +665,7 @@ public class TableExportToLuaHelper
                     if (fieldInfo.Data[row] == null)
                         content.Append("nil");
                     else
-                        content.Append(((DateTime)(fieldInfo.Data[row]) - AppValues.REFERENCE_DATE).TotalSeconds);
+                        content.Append(((DateTime)(fieldInfo.Data[row]) - AppValues.REFERENCE_DATE_LOCAL).TotalSeconds);
 
                     break;
                 }
@@ -674,7 +674,7 @@ public class TableExportToLuaHelper
                     if (fieldInfo.Data[row] == null)
                         content.Append("nil");
                     else
-                        content.Append(((DateTime)(fieldInfo.Data[row]) - AppValues.REFERENCE_DATE).TotalMilliseconds);
+                        content.Append(((DateTime)(fieldInfo.Data[row]) - AppValues.REFERENCE_DATE_LOCAL).TotalMilliseconds);
 
                     break;
                 }
@@ -684,7 +684,7 @@ public class TableExportToLuaHelper
                         content.Append("nil");
                     else
                     {
-                        double totalSeconds = ((DateTime)(fieldInfo.Data[row]) - AppValues.REFERENCE_DATE).TotalSeconds;
+                        double totalSeconds = ((DateTime)(fieldInfo.Data[row]) - AppValues.REFERENCE_DATE_LOCAL).TotalSeconds;
                         content.Append("os.date(\"!*t\", ").Append(totalSeconds).Append(")");
                     }
 

@@ -382,7 +382,7 @@ public class Utils
         Console.WriteLine(errorString);
         Console.WriteLine("程序被迫退出，请修正错误后重试");
         Console.ReadKey();
-        Environment.Exit(0);
+        Environment.Exit(-1);
     }
 
     /// <summary>
@@ -503,22 +503,22 @@ public class Utils
 
             // 2018-4-10 新增导出客户端和服务器分开的2个目录
             // 全文件路径
-            string allTablePath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName);
+            //string allTablePath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTablePathName);
 
             // 客户端
             string clientPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableClientPathName);
             // 服务器
             string serverPath = Path.Combine(AppValues.ExportLuaFilePath, AppValues.ExceptExportTableServerPathName);
 
-            // 创建基础版本
-            allTablePath = GetExportDirectoryPath(tableName, allTablePath);
+            //// 创建基础版本
+            //allTablePath = GetExportDirectoryPath(tableName, allTablePath);
 
             // 根据Table路径获取二级目录名
             clientPath = GetExportDirectoryPath(tableName, clientPath);
             serverPath = GetExportDirectoryPath(tableName, serverPath);
 
-            // 导出基础版本
-            WriteLuaFile(fileName, content, allTablePath);
+            //// 导出基础版本
+            //WriteLuaFile(fileName, content, allTablePath);
 
             switch (exportConfig)
             {

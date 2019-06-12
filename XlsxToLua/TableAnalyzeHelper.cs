@@ -1032,7 +1032,7 @@ public class TableAnalyzeHelper
                         invalidInfo.Add(row, inputData);
                     else
                     {
-                        DateTime dateTime = AppValues.REFERENCE_DATE.AddSeconds((double)inputLongValue);
+                        DateTime dateTime = AppValues.REFERENCE_DATE_LOCAL.AddSeconds((double)inputLongValue);
                         fieldInfo.Data.Add(dateTime);
                     }
                 }
@@ -1053,7 +1053,7 @@ public class TableAnalyzeHelper
                         invalidInfo.Add(row, inputData);
                     else
                     {
-                        DateTime dateTime = AppValues.REFERENCE_DATE.AddMilliseconds((double)inputLongValue);
+                        DateTime dateTime = AppValues.REFERENCE_DATE_LOCAL.AddMilliseconds((double)inputLongValue);
                         fieldInfo.Data.Add(dateTime);
                     }
                 }
@@ -1277,11 +1277,7 @@ public class TableAnalyzeHelper
                             invalidInfo.Add(row, inputData);
                         else
                         {
-                            int hour = (int)inputIntValue / 60 / 60;
-                            int remainingSecond = (int)inputIntValue - hour * 60 * 60;
-                            int minute = remainingSecond / 60;
-                            remainingSecond = remainingSecond - minute * 60;
-                            DateTime dateTime = new DateTime(AppValues.REFERENCE_DATE.Year, AppValues.REFERENCE_DATE.Month, AppValues.REFERENCE_DATE.Day, hour, minute, remainingSecond);
+                            DateTime dateTime = AppValues.REFERENCE_DATE.AddSeconds(inputIntValue);
                             fieldInfo.Data.Add(dateTime);
                         }
                     }
@@ -1444,7 +1440,7 @@ public class TableAnalyzeHelper
                         fieldInfo.Data.Add(jsonData);
                     else
                     {
-                        errorStringBuilder.AppendFormat("第{0}行填写的的数据（{1}）非法，{2}\n", row - AppValues.DATA_FIELD_DATA_START_INDEX + 1, inputData, errorString);
+                        errorStringBuilder.AppendFormat("第{0}行填写的数据（{1}）非法，{2}\n", row + 1, inputData, errorString);
                         fieldInfo.Data.Add(null);
                     }
                 }
